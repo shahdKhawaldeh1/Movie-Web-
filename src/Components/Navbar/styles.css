@@ -1,0 +1,138 @@
+.navbar-brand{
+    font-size: 20px;
+}
+.nav-item {
+    margin-top: 10px;
+    font-size: 20px;
+}
+.loader {
+    --cell-size: 10px;
+    --cell-spacing: 1px;
+    margin-right:20px;
+    --cells: 3;
+    --total-size: calc(var(--cells) * (var(--cell-size) + 2 * var(--cell-spacing)));
+    display: flex;
+    flex-wrap: wrap;
+    width: var(--total-size);
+    height: var(--total-size);
+  }
+  
+  .cell {
+    flex: 0 0 var(--cell-size);
+    margin: var(--cell-spacing);
+    background-color: transparent;
+    box-sizing: border-box;
+    border-radius: 4px;
+    animation: 1.5s ripple ease infinite;
+  }
+  
+  .cell.d-1 {
+    animation-delay: 100ms;
+  }
+  
+  .cell.d-2 {
+    animation-delay: 200ms;
+  }
+  
+  .cell.d-3 {
+    animation-delay: 300ms;
+  }
+  
+  .cell.d-4 {
+    animation-delay: 400ms;
+  }
+  
+  .cell:nth-child(1) {
+    --cell-color: #7e0d00;
+  }
+  
+  .cell:nth-child(2) {
+    --cell-color: #8c1800;
+  }
+  
+  .cell:nth-child(3) {
+    --cell-color: #9a2300;
+  }
+  
+  .cell:nth-child(4) {
+    --cell-color: #a82d00;
+  }
+  
+  .cell:nth-child(5) {
+    --cell-color: #b63900;
+  }
+  
+  .cell:nth-child(6) {
+    --cell-color: #c54400;
+  }
+  
+  .cell:nth-child(7) {
+    --cell-color: #d34f00;
+  }
+  
+  .cell:nth-child(8) {
+    --cell-color: #e15900;
+  }
+  
+  .cell:nth-child(9) {
+    --cell-color: #ef6400;
+  }
+  
+  
+  /*Animation*/
+  @keyframes ripple {
+    0% {
+      background-color: transparent;
+    }
+  
+    30% {
+      background-color: var(--cell-color);
+    }
+  
+    60% {
+      background-color: transparent;
+    }
+  
+    100% {
+      background-color: transparent;
+    }
+  }
+  
+.button-container{
+    display: flex;
+    width: 250px;
+    height: 40px;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+    margin-bottom: 10px; /* Add margin to create space between container and button-container */
+  }
+ 
+
+  
+  .button {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+  }
+  
+  .button:hover , .nav-item {
+    transform: translateY(-3px);
+  }
+  
+  .icon {
+    margin-top: 10px;
+
+    font-size: 50px;
+  }
+  
