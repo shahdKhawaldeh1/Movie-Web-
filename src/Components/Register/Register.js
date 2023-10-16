@@ -1,35 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles.css';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { regSchema } from '../Schemas/register';
-import { useNavigate } from 'react-router-dom'; 
+import * as Yup from 'yup'; // Import Yup for validation
+import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
-  const [error, setErrors] = useState([]);
-  const navigate = useNavigate(); 
-  const { errors, values, handleChange, handleSubmit, handleBlur, touched } = useFormik({
+  const [error, setErrors] = React.useState([]);
+  const navigate = useNavigate();
+
+  const { errors, values, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: '',
       name: '',
       password: '',
       cpassword: '',
     },
-    validationSchema: regSchema,
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .email('Invalid email address')
+        .notRequired()
+        .nullable(),
+
+      name: Yup.string()
+        .notRequired()
+        .nullable(),
+
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
+        .notRequired()
+        .nullable(),
+
+      cpassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .notRequired()
+        .nullable(),
+    }),
     onSubmit: register,
   });
 
   async function register(formData) {
     try {
       const response = await axios.post(
-        'https://lazy-blue-sockeye-gear.cyclic.app/appi/v1/auth/signup',
+        'https://correct-url-here.com', // Update the correct URL
         formData
       );
       if (response.data.message === 'success') {
         console.log('registered');
-        navigate('/login'); 
+        navigate('/login');
       } else {
-        setErrors([response.data.err[0]]);
+        if (Array.isArray(response.data.err)) {
+          setErrors(response.data.err);
+        } else {
+          setErrors([response.data.err]);
+        }
       }
       console.log(response.data);
     } catch (error) {
@@ -54,18 +78,15 @@ export const Register = () => {
             </label>
             <input
               type="email"
-              className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
               id="exampleInputEmail1"
               name="email"
               aria-describedby="emailHelp"
               value={values.email}
               onChange={handleChange}
-              onBlur={handleBlur}
             />
-            {touched.email && errors.email ? (
+            {errors.email && (
               <div className="small text-danger">{errors.email}</div>
-            ) : (
-              <></>
             )}
           </div>
           <div className="mb-3">
@@ -74,36 +95,31 @@ export const Register = () => {
             </label>
             <input
               type="text"
-              className={`form-control ${touched.name && errors.name ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
               id="exampleInputName"
               name="name"
               value={values.name}
               onChange={handleChange}
-              onBlur={handleBlur}
             />
-            {touched.name && errors.name ? (
+            {errors.name && (
               <div className="small text-danger">{errors.name}</div>
-            ) : (
-              <></>
             )}
           </div>
+          <div className="mb-3">
           <div className="mb-3">
             <label className="input-form" htmlFor="exampleInputPassword">
               Password
             </label>
             <input
               type="password"
-              className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
               id="exampleInputPassword"
               name="password"
               value={values.password}
               onChange={handleChange}
-              onBlur={handleBlur}
             />
-            {touched.password && errors.password ? (
+            {errors.password && (
               <div className="small text-danger">{errors.password}</div>
-            ) : (
-              <></>
             )}
           </div>
           <div className="mb-3">
@@ -112,17 +128,16 @@ export const Register = () => {
             </label>
             <input
               type="password"
-              className={`form-control ${touched.cpassword && errors.cpassword ? 'is-invalid' : ''}`}
+              className={`form-control ${
+                errors.cpassword ? 'is-invalid' : ''
+              }`}
               id="exampleInputConfirmPassword"
               name="cpassword"
               value={values.cpassword}
               onChange={handleChange}
-              onBlur={handleBlur}
             />
-            {touched.cpassword && errors.cpassword ? (
+            {errors.cpassword && (
               <div className="small text-danger">{errors.cpassword}</div>
-            ) : (
-              <></>
             )}
           </div>
           <div className="center-container">
@@ -130,6 +145,7 @@ export const Register = () => {
               Submit
             </button>
           </div>
+        </div>
         </div>
       </form>
     </>

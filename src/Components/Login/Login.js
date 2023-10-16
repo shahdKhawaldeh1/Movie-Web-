@@ -4,16 +4,16 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { regSchema } from '../Schemas/register';
 import { useNavigate } from 'react-router-dom';
+// ... (import statements and component definition)
 
 export const Login = () => {
   const [errors, setErrors] = useState([]);
-   let navigate=useNavigate();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
-   
     },
     validate: (values) => {
       const errors = {};
@@ -22,32 +22,19 @@ export const Login = () => {
         errors.email = 'Email is required';
       }
 
-      if (!values.name) {
-        errors.name = 'Name is required';
-      }
-
       if (!values.password) {
         errors.password = 'Password is required';
-      }
-
-      if (!values.cpassword) {
-        errors.cpassword = 'Confirm Password is required';
-      }
-
-      if (values.password !== values.cpassword) {
-        errors.cpassword = 'Passwords do not match';
       }
 
       return errors;
     },
     onSubmit: async (values) => {
       try {
-        const { data } = await axios.post('https://ecommerce-node-3.vercel.app/auth/signup', values);
+        const { data } = await axios.post('https://ecommerce-node-3.vercel.app/auth/login', values);
         if (data.message === 'success') {
-          console.log('register');
-          localStorage.setItem('token',data.token)
-          navigate('/movie')
-          
+          console.log('login successful');
+          localStorage.setItem('token', data.token);
+          navigate('/movie'); // Make sure the route is correctly defined
         } else {
           setErrors([data.err[0].message]);
         }
@@ -58,7 +45,7 @@ export const Login = () => {
     validationSchema: regSchema,
   });
 
-  return (
+   return (
     <>
 <div className="container pt-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
   {errors.map((err, index) => (
